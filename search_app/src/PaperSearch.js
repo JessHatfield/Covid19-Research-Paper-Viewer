@@ -173,7 +173,7 @@ function SearchResultRow(props) {
     return (
         <tr>
             <td>
-                <a href={paper_url}>{title}</a>
+                <a href={paper_url} target={"_blank"}>{title}</a>
             </td>
 
             <td>
@@ -235,7 +235,7 @@ function ReadingListDropdown(props) {
 
 
     const menu_items = reading_list.map(reading_list_item => {
-        return <Dropdown.Item href={reading_list_item.paper_url}
+        return <Dropdown.Item href={reading_list_item.paper_url} data-testid={`Dropdown Row ${reading_list_item.id}`}
                               target={"_blank"} key={reading_list_item.id}>{reading_list_item.title}</Dropdown.Item>
     })
 
