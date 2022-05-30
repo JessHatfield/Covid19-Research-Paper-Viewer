@@ -1,0 +1,6 @@
+/api.db
+/venv/
+/search_app/node_modules/
+/search_app/README.md
+/search_app/build/
+/search_app/package-lock.json
