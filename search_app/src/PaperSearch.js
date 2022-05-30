@@ -1,32 +1,22 @@
-import {Container, Form, Row, Table} from "react-bootstrap";
+import {Col, Container, Dropdown, Form, Row, Table} from "react-bootstrap";
 import {useFormik} from "formik";
 import {useState} from "react";
 
 export function PaperSearchPage() {
 
-    const [search_results, set_search_results] = useState([{
-        'title': 'Coronaviruses in Balkan nephritis', 'publish_date': '1980-03-31',
-        'paper_url': 'https://doi.org/10.1016/0002-8703(80)90355-5',
-        'journal': 'American Heart Journal',
-        'authors': 'Georgescu, Leonida; Diosi, Peter; Buţiu, Ioan; Plavoşin, Livia; Herzog, Georgeta',
-        'id': '1',
-        'abstract': 'This is a journal article that explores coronaviruses in balkan nephritis'
-    },
-        {
-            'title': 'Predict7, a program for protein structure prediction',
-            'publish_date': '1989-03-15', 'paper_url': 'https://doi.org/10.1016/0006-291x(89)90049-1',
-            'journal': 'Biochemical and Biophysical Research Communications',
-            'authors': 'Cármenes, R.S.; Freije, J.P.; Molina, M.M.; Martín, J.M.', 'id': '2',
-            'abstract': 'This is a journal article that explores protein structure prediction in coronaviruses'
-        }])
-
+    const [search_results, set_search_results] = useState([])
 
     return (
 
         <Container>
             <Row>
+                <Col>
+                    <SearchBox set_search_results={set_search_results}></SearchBox>
+                </Col>
 
-                <SearchBox set_search_results={set_search_results}></SearchBox>
+                <Col>
+                    <ReadingListDropdown></ReadingListDropdown>
+                </Col>
             </Row>
 
             <Row>
@@ -50,16 +40,14 @@ async function FetchSearchResults(search_term, set_search_results) {
         set_search_results([])
     }
 
-    const response = await fetch(`http://127.0.0.1:5000/api/v1/search?search_term=${search_term}`,{method:'GET'})
+    const response = await fetch(`http://127.0.0.1:5000/api/v1/search?search_term=${search_term}`, {method: 'GET'})
 
     try {
         if (response.ok) {
             const response_data = await response.json();
             set_search_results(response_data)
         }
-    }
-
-    catch(err){
+    } catch (err) {
         set_search_results([])
     }
 }
@@ -162,4 +150,33 @@ function SearchResultTable(props) {
 
         </Table>
     )
+}
+
+function ReadingListDropdown() {
+
+    const reading_list = [{
+        "title": "Coronaviruses in Balkan nephritis",
+        "page_url": "https://doi.org/10.1016/0002-8703(80)90355-5",
+        "id": "1"
+    }]
+
+    const menu_items = reading_list.map(reading_list_item => {
+        return <Dropdown.Item href={reading_list_item.page_url}
+                              target={"_blank"}>{reading_list_item.title}</Dropdown.Item>
+    })
+
+    return (
+
+        <Dropdown>
+            <Dropdown.Toggle id={"dropdown-basic"}>
+                Reading List ({(reading_list.length)})
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+                {menu_items}
+            </Dropdown.Menu>
+        </Dropdown>
+
+    )
+
 }
