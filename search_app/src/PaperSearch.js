@@ -1,10 +1,63 @@
 import {Col, Container, Dropdown, Form, Row, Table} from "react-bootstrap";
 import {useFormik} from "formik";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+
+
+async function FetchReadingList(set_reading_list) {
+    const response = await fetch('http://127.0.0.1:5000/api/v1/reading_list', {method: 'GET'})
+
+    try {
+        if (response.ok) {
+            const response_data = await response.json();
+            set_reading_list(response_data)
+        }
+    } catch (err) {
+        set_reading_list([])
+    }
+
+
+}
+
+
+async function AddItemToReadingList(title, paper_url, set_reading_list) {
+
+    const response = await fetch('http://127.0.0.1:5000/api/v1/reading_list', {
+        method: 'POST', body: JSON.stringify({
+            title: title,
+            paper_url: paper_url
+        }),
+        headers: {"Content-Type": "application/json"}
+    })
+
+    try {
+        if (response.ok) {
+
+            FetchReadingList(set_reading_list)
+
+        }
+    } catch (err) {
+
+    }
+
+}
 
 export function PaperSearchPage() {
 
     const [search_results, set_search_results] = useState([])
+    const [reading_list, set_reading_list] = useState([])
+
+    useEffect(() => {
+        FetchReadingList(set_reading_list)
+    }, [])
+
+
+    // add item to reading list datastructure
+    // send api request
+
+    // vs
+
+    //add item via api
+    //refetch entire list
 
     return (
 
@@ -15,7 +68,7 @@ export function PaperSearchPage() {
                 </Col>
 
                 <Col>
-                    <ReadingListDropdown></ReadingListDropdown>
+                    <ReadingListDropdown reading_list={reading_list}></ReadingListDropdown>
                 </Col>
             </Row>
 
@@ -24,7 +77,8 @@ export function PaperSearchPage() {
             </Row>
 
             <Row>
-                <SearchResultTable search_results={search_results}></SearchResultTable>
+                <SearchResultTable search_results={search_results}
+                                   set_reading_list={set_reading_list}></SearchResultTable>
             </Row>
         </Container>
     )
@@ -90,14 +144,31 @@ function ResultCounter(props) {
     return (<div>{result_count} Results Have Been Found</div>)
 }
 
+
+function AddReadingListItemButton(props) {
+    const {set_reading_list} = props
+    const {item_title} = props
+    const {item_url} = props
+
+    return (
+        <button onClick={() => {
+            AddItemToReadingList(item_title, item_url, set_reading_list)
+        }}>Add</button>
+    )
+
+
+}
+
 function SearchResultRow(props) {
 
+    const {set_reading_list} = props
     const {search_result} = props
     const {title} = search_result
     const {publish_date} = search_result
     const {journal} = search_result
     const {authors} = search_result
     const {paper_url} = search_result
+
 
     return (
         <tr>
@@ -116,6 +187,10 @@ function SearchResultRow(props) {
             <td>
                 {authors}
             </td>
+
+            <td>
+                <AddReadingListItemButton set_reading_list={set_reading_list} item_title={title} item_url={paper_url}/>
+            </td>
         </tr>
     )
 
@@ -125,10 +200,12 @@ function SearchResultRow(props) {
 function SearchResultTable(props) {
 
     const {search_results} = props
+    const {set_reading_list} = props
 
 
     const table_rows = search_results.map((search_result) => {
-        return <SearchResultRow key={search_result.id} search_result={search_result}></SearchResultRow>
+        return <SearchResultRow key={search_result.id} search_result={search_result}
+                                set_reading_list={set_reading_list}></SearchResultRow>
     })
 
 
@@ -152,17 +229,14 @@ function SearchResultTable(props) {
     )
 }
 
-function ReadingListDropdown() {
+function ReadingListDropdown(props) {
 
-    const reading_list = [{
-        "title": "Coronaviruses in Balkan nephritis",
-        "page_url": "https://doi.org/10.1016/0002-8703(80)90355-5",
-        "id": "1"
-    }]
+    const {reading_list} = props
+
 
     const menu_items = reading_list.map(reading_list_item => {
-        return <Dropdown.Item href={reading_list_item.page_url}
-                              target={"_blank"}>{reading_list_item.title}</Dropdown.Item>
+        return <Dropdown.Item href={reading_list_item.paper_url}
+                              target={"_blank"} key={reading_list_item.id}>{reading_list_item.title}</Dropdown.Item>
     })
 
     return (

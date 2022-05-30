@@ -59,7 +59,7 @@ def get_reading_list():
 
 
 @bp.route('/reading_list', methods=['POST'])
-def add_item_to_read_list():
+def add_item_to_reading_list():
     reading_list_item = request.get_json()
 
     if reading_list_item is None:
