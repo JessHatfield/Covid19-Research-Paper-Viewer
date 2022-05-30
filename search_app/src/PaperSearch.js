@@ -1,4 +1,4 @@
-import {Col, Container, Dropdown, Form, Row, Table} from "react-bootstrap";
+import {Col, Container, Dropdown, Form, Row, Spinner, Table} from "react-bootstrap";
 import {useFormik} from "formik";
 import {useEffect, useState} from "react";
 
@@ -86,7 +86,7 @@ export function PaperSearchPage() {
 }
 
 
-async function FetchSearchResults(search_term, set_search_results) {
+async function FetchSearchResults(search_term, set_search_results, set_submission_state) {
 
 
     if (search_term == undefined) {
@@ -94,14 +94,18 @@ async function FetchSearchResults(search_term, set_search_results) {
         set_search_results([])
     }
 
+    set_submission_state("submitting")
+
     const response = await fetch(`http://127.0.0.1:5000/api/v1/search?search_term=${search_term}`, {method: 'GET'})
 
     try {
         if (response.ok) {
             const response_data = await response.json();
+            set_submission_state()
             set_search_results(response_data)
         }
     } catch (err) {
+        set_submission_state()
         set_search_results([])
     }
 }
@@ -110,13 +114,14 @@ async function FetchSearchResults(search_term, set_search_results) {
 function SearchBox(props) {
 
     const {set_search_results} = props
+    const [submission_state, set_submission_state] = useState()
 
     const formik = useFormik({
         initialValues: {
             search_term: "",
         },
         onSubmit: values => {
-            FetchSearchResults(values.search_term, set_search_results)
+            FetchSearchResults(values.search_term, set_search_results, set_submission_state)
         }
 
     });
@@ -126,7 +131,11 @@ function SearchBox(props) {
             <label htmlFor="search_term">Search Input</label>
             <input id={"search_term"} name={"search_term"} type="search_term"
                    onChange={formik.handleChange} value={formik.values.search_term}/>
-            <button type={"submit"}>Search</button>
+
+            {submission_state === "submitting" ?
+                <Spinner animation={"border"} size={"sm"}/> :
+                <button type={"submit"}>Search</button>
+            }
 
         </form>
     )
