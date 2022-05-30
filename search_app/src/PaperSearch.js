@@ -52,9 +52,6 @@ async function FetchSearchResults(search_term, set_search_results) {
 
     const response = await fetch(`http://127.0.0.1:5000/api/v1/search?search_term=${search_term}`,{method:'GET'})
 
-    //if the response is ok then parse and return search results
-
-    //json is a list of objects
     try {
         if (response.ok) {
             const response_data = await response.json();
@@ -63,7 +60,7 @@ async function FetchSearchResults(search_term, set_search_results) {
     }
 
     catch(err){
-
+        set_search_results([])
     }
 }
 

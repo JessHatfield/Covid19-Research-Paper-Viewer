@@ -14,8 +14,22 @@ class PaperSchema(ma.Schema):
     abstract = ma.String()
 
 
-class PaperStore(db.Model):
+class ReadingListSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'title', 'paper_url')
 
+    id = ma.String()
+    title = ma.String()
+    paper_url = ma.String()
+
+
+class ReadingList(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.Text)
+    paper_url = db.Column(db.Text)
+
+
+class PaperStore(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text)
     # dtype depends on db used
@@ -27,4 +41,3 @@ class PaperStore(db.Model):
     authors = db.Column(db.Text)
     paper_url = db.Column(db.Text)
     abstract = db.Column(db.Text)
-
