@@ -1,4 +1,4 @@
-import {Col, Container, Dropdown, Form, Row, Spinner, Table} from "react-bootstrap";
+import {Button, Col, Container, Dropdown, Form, Row, Spinner, Table} from "react-bootstrap";
 import {useFormik} from "formik";
 import {useEffect, useState} from "react";
 
@@ -72,13 +72,13 @@ export function PaperSearchPage() {
                 </Col>
             </Row>
 
-            <Row>
+            <Row className={"mt-2"}>
                 <ResultCounter result_count={search_results.length}></ResultCounter>
             </Row>
 
-            <Row>
+            <Row className={"mt-2"}>
                 <SearchResultTable search_results={search_results}
-                                   set_reading_list={set_reading_list}></SearchResultTable>
+                                   set_reading_list={set_reading_list} ></SearchResultTable>
             </Row>
         </Container>
     )
@@ -127,17 +127,17 @@ function SearchBox(props) {
     });
 
     return (
-        <form onSubmit={formik.handleSubmit}>
-            <label htmlFor="search_term">Search Input</label>
+        <Form onSubmit={formik.handleSubmit}>
+            <label htmlFor="search_term"></label>
             <input id={"search_term"} name={"search_term"} type="search_term"
                    onChange={formik.handleChange} value={formik.values.search_term}/>
 
             {submission_state === "submitting" ?
-                <Spinner animation={"border"} size={"sm"}/> :
-                <button type={"submit"}>Search</button>
+                <Spinner animation={"border"} className={"ms-1"} size={"sm"}/> :
+                <Button variant={"primary"} type={"submit"} className={"ms-1"}>Search</Button>
             }
 
-        </form>
+        </Form>
     )
 
 }
@@ -160,9 +160,9 @@ function AddReadingListItemButton(props) {
     const {item_url} = props
 
     return (
-        <button onClick={() => {
+        <Button variant={"secondary"} onClick={() => {
             AddItemToReadingList(item_title, item_url, set_reading_list)
-        }}>Add</button>
+        }}>Add</Button>
     )
 
 

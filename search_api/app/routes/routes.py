@@ -41,7 +41,7 @@ def search_paper_metadata():  # put application's code here
     # hard limit has been set in place to prevent broad queries from fetching entire database and slowing down the react app
     # pagination is a clear solution to this.Smaller pages=smaller data structures=no slowdown. Likely offset+limit pagination.
     # offset + limit pagination can lead to performance slow-downs server side
-    # However performance hit from returning 40k records seems to occur largely within the browser itself when loading + rendering data
+    # However performance hit from returning 40k records seems to occur largely within the transfer of data over the network and within the browser itself when loading + rendering data
     # So I'm not too concerned about server speed limits incurred from this pagination choice
     # Offset + limit pagination is also easy to implement so it wins as the choice of pagination approach
 
@@ -50,7 +50,7 @@ def search_paper_metadata():  # put application's code here
                                       PaperStore.authors.like(f"%{search_term}%") |
                                       PaperStore.journal.like(f"%{search_term}%") |
                                       PaperStore.abstract.like(f"%{search_term}%")
-                                      ).limit(1000).all()
+                                      ).limit(5000).all()
 
     papers_schema = PaperSchema(many=True)
 

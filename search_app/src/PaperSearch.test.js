@@ -92,9 +92,19 @@ describe("Key User Journeys", () => {
 
         let table_rows = await screen.findAllByRole("row")
 
-        //Check that user can see both rows and that they contain the correct titles
+        //Check that user can see both rows and that they contain the correct titles/publish date/journal and authors
         expect(table_rows[1]).toHaveTextContent('New Viruses in Balkan nephritis')
         expect(table_rows[2]).toHaveTextContent('Predict7, a program for protein structure prediction')
+
+        expect(table_rows[1]).toHaveTextContent('1980-03-31')
+        expect(table_rows[2]).toHaveTextContent('1989-03-15')
+
+        expect(table_rows[1]).toHaveTextContent('American Heart Journal')
+        expect(table_rows[2]).toHaveTextContent('Biochemical and Biophysical Research Communications')
+
+        expect(table_rows[1]).toHaveTextContent('Georgescu, Leonida; Diosi, Peter; Buţiu, Ioan; Plavoşin, Livia; Herzog, Georgeta')
+        expect(table_rows[2]).toHaveTextContent('Cármenes, R.S.; Freije, J.P.; Molina, M.M.; Martín, J.M.')
+
 
 
     })
