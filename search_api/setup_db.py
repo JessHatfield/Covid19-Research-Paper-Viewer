@@ -1,11 +1,11 @@
 import csv
+import os
 
 from sqlalchemy import create_engine
 
 from search_api.api import create_app, db
 from search_api.app.models import PaperStore
 from search_api.config import Config
-import pandas as pd
 
 # Create the Sqlite DB
 

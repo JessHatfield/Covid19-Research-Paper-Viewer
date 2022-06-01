@@ -9,8 +9,10 @@ db = SQLAlchemy()
 ma = Marshmallow()
 
 
+
+
 def create_app(config_class=Config):
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='../search_app/build',template_folder='../search_app/build', static_url_path='')
     CORS(app)
     app.config.from_object(config_class)
 
@@ -18,7 +20,7 @@ def create_app(config_class=Config):
     ma.init_app(app)
 
     from search_api.app.routes import bp as route_bp
-    app.register_blueprint(route_bp, url_prefix='/api/v1')
+    app.register_blueprint(route_bp)
 
     return app
 

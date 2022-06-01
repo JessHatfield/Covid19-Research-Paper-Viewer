@@ -1,5 +1,4 @@
-from flask import request, jsonify
-from flask_cors import cross_origin
+from flask import request, jsonify, render_template, send_from_directory
 
 from search_api.api import db
 from search_api.app.models import PaperStore, PaperSchema, ReadingList, ReadingListSchema
@@ -28,8 +27,17 @@ def handle_invalid_request(error):
     response.status_code = error.status_code
     return response
 
+@bp.route('/')
+def index():
+    return render_template('index.html')
 
-@bp.route('/search', methods=['GET'])
+@bp.route('/static/<path:path>')
+def static_files(path):
+    return send_from_directory('../search_app/build/static', path)
+
+
+
+@bp.route('/api/v1/search', methods=['GET'])
 def search_paper_metadata():  # put application's code here
     search_term = request.args.get('search_term')
 
@@ -57,7 +65,7 @@ def search_paper_metadata():  # put application's code here
     return jsonify(papers_schema.dump(results))
 
 
-@bp.route('/reading_list', methods=['GET'])
+@bp.route('/api/v1/reading_list', methods=['GET'])
 def get_reading_list():
     reading_list = ReadingList.query.all()
 
@@ -66,7 +74,7 @@ def get_reading_list():
     return jsonify(reading_list_schema.dump(reading_list))
 
 
-@bp.route('/reading_list', methods=['POST'])
+@bp.route('/api/v1/reading_list', methods=['POST'])
 def add_item_to_reading_list():
     reading_list_item = request.get_json()
 

@@ -5,3 +5,5 @@
 /search_app/build/
 /search_app/package-lock.json
 /search_api/tests/api.db
+/.env
+/search_api/api.db
