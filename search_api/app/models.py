@@ -1,5 +1,6 @@
 from search_api.api import db, ma
 
+# Flask Marshmallow is used here to provide easy conversion from SQLAlchemy Objects to raw JSON for use in API responses
 
 class PaperSchema(ma.Schema):
     class Meta:

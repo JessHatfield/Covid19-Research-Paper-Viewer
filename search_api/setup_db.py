@@ -1,11 +1,14 @@
 import csv
-import os
+
 
 from sqlalchemy import create_engine
 
 from search_api.api import create_app, db
 from search_api.app.models import PaperStore
 from search_api.config import Config
+
+
+#A short script to load the contents of the metadata.csv file into our SQLlite Database
 
 # Create the Sqlite DB
 

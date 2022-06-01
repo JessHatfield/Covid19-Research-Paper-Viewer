@@ -37,7 +37,7 @@ class AddItemToReadingList(unittest.TestCase):
                                follow_redirects=True)
         self.assertEqual(result.status_code, 200)
 
-        ##check that reading list exists in database
+        # check that reading list item now exists in database
 
         reading_list_in_db = ReadingList.query.filter(ReadingList.title == "Coronaviruses in Balkan nephritis").all()
         self.assertEqual(len(reading_list_in_db), 1)
@@ -126,6 +126,8 @@ class PaperSearchAPITests(unittest.TestCase):
 
         search_result = self.app.get(f'{TestConfig.API_DOMAIN}/api/v1/search?search_term=balkan nephritis')
 
+        # because we have separate tests to confirm the exact structure of the JSON produces by PaperSchema. We can use the Schema class to auto generate the result to assert agaisnt vs using hardcoded list of dicts!
+
         self.assertEqual(search_result.json, [PaperSchema().dump(paper_to_retrieve)])
 
     def test_paper_authors_can_be_searched(self):
@@ -147,8 +149,27 @@ class PaperSearchAPITests(unittest.TestCase):
 
         self.assertEqual(search_result.json, [PaperSchema().dump(paper_to_retrieve)])
 
+    def test_paper_journal_name_can_be_searched(self):
+        paper_to_ignore = PaperStore(title="Coronaviruses in Balkan nephritis", journal="American Heart Journal",
+                                     authors="Georgescu, Leonida; Diosi, Peter; Buţiu, Ioan; Plavoşin, Livia; Herzog, Georgeta",
+                                     paper_url="https://doi.org/10.1016/0002-8703(80)90355-5",
+                                     publish_date="1980-03-31")
+
+        paper_to_retrieve = PaperStore(title="Predict7, a program for protein structure prediction",
+                                       journal="Biochemical and Biophysical Research Communications",
+                                       authors="Cármenes, R.S.; Freije, J.P.; Molina, M.M.; Martín, J.M.",
+                                       paper_url="https://doi.org/10.1016/0006-291x(89)90049-1",
+                                       publish_date="1989-03-15")
+
+        db.session.add_all([paper_to_retrieve, paper_to_ignore])
+        db.session.commit()
+
+        search_result = self.app.get(f'{TestConfig.API_DOMAIN}/api/v1/search?search_term=Biochemical and Biophysical Research Communications')
+
+        self.assertEqual(search_result.json, [PaperSchema().dump(paper_to_retrieve)])
+
     def test_paper_abstract_can_be_searched(self):
-        # Both papers have coronvavirus in their abstract and nowhere else and should be retrieved as a result
+        # Both papers have coronvavirus in their abstract and nowhere else and both should be retrieved as a result
 
         paper_1 = PaperStore(title="New Viruses in Balkan nephritis", journal="American Heart Journal",
                              authors="Georgescu, Leonida; Diosi, Peter; Buţiu, Ioan; Plavoşin, Livia; Herzog, Georgeta",
