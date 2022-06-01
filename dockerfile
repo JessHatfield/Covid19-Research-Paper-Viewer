@@ -3,9 +3,6 @@
 #Download Python from DockerHub and use it
 FROM python:3.6
 
-#Set the working directory in the Docker container
-#WORKDIR /HealXPaperSearchApp
-
 
 #Copy the API
 COPY search_api/ /search_api/
