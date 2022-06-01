@@ -1,7 +1,7 @@
 
 # Covid-19 Research Paper Search Tool
 
-A small webapp to surface metadata on research papers relating to covid-19. 
+A small webapp to surface metadata on research papers relating to Covid-19. 
 Built using Flask + React.
 
 Features
