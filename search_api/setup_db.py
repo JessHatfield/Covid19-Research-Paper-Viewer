@@ -32,6 +32,9 @@ with open("search_api/app/metadata.csv", "r") as metadata_file:
 
 db.session.bulk_save_objects(papers_to_insert)
 db.session.commit()
+
+print(f"{len(papers_to_insert)} Research Papers Have Been Added To The Database")
+print("Database Setup Is Complete")
 exit()
 
 

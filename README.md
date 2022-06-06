@@ -111,3 +111,40 @@ Start the React Dev Server
 cd search_app
 npm run start
 ```
+
+
+### Additional Features
+
+
+* Pagination
+  * Currently, the application becomes much less responsive when broad searches are made and thousands of results are surfaced.
+  * The slowdown is largely driven clientside by the time taken to render results.
+  * Pagination would allow us to only serve dozens of results in a single page. Maintaining responsiveness.
+
+* User specific reading list. This could be added by
+  * Implementing user authentication (via a third party identity provider like Google to reduce user friction + dev work)+ surface reading list per user.
+  * Or storing a reading list object per user in their browsers local storage. 
+  * It would be useful to better understand how the application is used. Shared reading lists (for example from within a single research team) might actually be a useful feature!
+
+
+* Prevent the same paper being added to the same reading list twice.
+  * This could be done by adding a short validation function on the frontend checking the id of the paper to be added against the papers currently added.
+
+* Elasticsearch integration
+    * I went with a basic SQL query approach due to time constraints.
+    * The more relevant the search results are the more usable the application becomes
+    * In a production app I would be leaning towards using a third party search tool.
+      * Search + NLP is a very deep domain. Makes sense to leverage expertise of others and use existing tools vs building a new one from scratch.
+  
+    * Elasticsearch seems like one such option. It offers:
+      * Support for the construction more advanced search filters + generation of more sophisticated results.
+      * Improved search times + capacity for scaling vs current approach (Although this not a bottleneck currently)
+      
+* Caching of search results via flask-cache.
+    * Caching would help improve response times on the search endpoint
+    * Flask-caching offers an easy-to-use implementation
+    * Only GET request are made to this endpoint and the underlying data queried is likely to change infrequently (daily rather than every few seconds!)
+    * Cache can just be invalidated each time we manually update the dataset
+    * Caching would therefore represent a relatively quick and easy way of improving API responsiveness + overall UX
+
+    
