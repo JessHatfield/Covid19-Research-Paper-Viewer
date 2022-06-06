@@ -51,14 +51,6 @@ export function PaperSearchPage() {
     }, [])
 
 
-    // add item to reading list datastructure
-    // send api request
-
-    // vs
-
-    //add item via api
-    //refetch entire list
-
     return (
 
         <Container>
