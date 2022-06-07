@@ -1,4 +1,4 @@
-import {Button, Col, Container, Dropdown, Form, Row, Spinner, Table} from "react-bootstrap";
+import {Button, Col, Container, Dropdown, Form, Navbar, Row, Spinner, Table} from "react-bootstrap";
 import {useFormik} from "formik";
 import {useEffect, useState} from "react";
 
@@ -53,8 +53,10 @@ export function PaperSearchPage() {
 
     return (
 
+
         <Container>
-            <Row>
+
+            <Row style={{position: "sticky", top: 0, zIndex: 1020, backgroundColor: "white"}}>
                 <Col>
                     <SearchBox set_search_results={set_search_results}></SearchBox>
                 </Col>
@@ -62,15 +64,16 @@ export function PaperSearchPage() {
                 <Col>
                     <ReadingListDropdown reading_list={reading_list}></ReadingListDropdown>
                 </Col>
+
+                <Row className={"mt-2"}>
+                    <ResultCounter result_count={search_results.length}></ResultCounter>
+                </Row>
             </Row>
 
-            <Row className={"mt-2"}>
-                <ResultCounter result_count={search_results.length}></ResultCounter>
-            </Row>
 
             <Row className={"mt-2"}>
                 <SearchResultTable search_results={search_results}
-                                   set_reading_list={set_reading_list} ></SearchResultTable>
+                                   set_reading_list={set_reading_list}></SearchResultTable>
             </Row>
         </Container>
     )
