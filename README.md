@@ -20,16 +20,16 @@ The application has been dockerised for ease of use.
 Download the docker image
 
 ```bash
-docker pull joshhatfield1994/covid19_research_paper_viewer
+docker pull jesshatfield/covid19_research_paper_viewer
 ```
 
 Run the docker image
 
 ```bash
-docker run --rm -p 5000:5000 joshhatfield1994/covid19_research_paper_viewer:latest
+docker run --rm -p 5000:5000 jesshatfield/covid19_research_paper_viewer:latest
 ```
 
-The webapp can the be viewed at http://0.0.0.0:5000.
+The webapp can then be viewed at http://0.0.0.0:5000.
 
 
 
@@ -42,7 +42,7 @@ Install python 3.6 (or greater) + pip and nodejs (version 14.17.4 or greater) + 
 Clone the github repository
 
 ```
-git clone https://github.com/JoshHatfield/Covid19-Research-Paper-Viewer
+git clone https://github.com/JessHatfield/Covid19-Research-Paper-Viewer
 
 ```
 
